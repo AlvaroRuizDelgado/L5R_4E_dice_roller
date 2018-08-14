@@ -21,7 +21,8 @@ Possible parameters:
     -e, --explosion, threshold value for dice explosion (10 by default).
 ```
 
-If you prefer the docker image:
+## Container use
+
 ```shell
 docker build -t l5r_dice .
 docker run -it --rm l5r_dice
