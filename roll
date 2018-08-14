@@ -1,18 +1,17 @@
 #!/usr/local/bin/python3
-
-# Last edited: 17/11/08
-# Pass number of dice to roll-keep (e.g. 6k3), followed by a bonus/penalty if applicable.
-#     -u, --unskilled, dice explosion is disabled.
-#     -e, --explosion, threshold value for dice explosion (10 by default).
-# 
-# Examples:
-#     ./roll 6k3 [12] [-u]
-#     ./roll 6k3 [-5] [--unskilled]
+# Last edited: 18/08/14
 
 import sys
 from random import randint
 
 def main(argv):
+    if (len(argv) == 0 or "--help" in argv):
+        print_help()
+        sys.exit()
+
+    # Die characteristics
+    die_range = 10
+
     # Explode mechanic
     unskilled_flag = False
     explosion_threshold = 10
@@ -34,9 +33,9 @@ def main(argv):
     print("Roll:",roll, "Keep:",keep, "Bonus:",bonus, "Exp. thresh.:", explosion_threshold, "Unskilled:",unskilled_flag)
 
     # 10 dice mechanic
-    max_dies = 10
-    if roll > max_dies:
-        difference = roll - max_dies
+    max_dice = 10
+    if roll > max_dice:
+        difference = roll - max_dice
         while keep < 10:
             if difference > 1:
                 keep += 1
@@ -44,11 +43,11 @@ def main(argv):
             else:
                 break
         bonus += 2 * difference
-        roll = max_dies
+        roll = max_dice
         #print(roll, keep, bonus)
-    if keep > max_dies:
-        bonus += 2 * (keep - max_dies)
-        keep = max_dies
+    if keep > max_dice:
+        bonus += 2 * (keep - max_dice)
+        keep = max_dice
         #print(roll, keep, bonus)
     if keep > roll:
         keep = roll
@@ -56,11 +55,11 @@ def main(argv):
     # Roll and save to a list.
     results = []
     for i in range (0, roll):
-        die_roll = randint(1,10)
+        die_roll = randint(1,die_range)
         results.append(die_roll)
         if unskilled_flag == False:
             while die_roll >= explosion_threshold:
-                die_roll = randint(1,10)
+                die_roll = randint(1,die_range)
                 results[i] += die_roll
         #print(results[i])
 
@@ -76,6 +75,16 @@ def main(argv):
         LIGHT_RED = '\033[35m'
 
     print(bcolors.GREY, results[0:roll-keep], bcolors.PURPLE, results[roll-keep:], bcolors.LIGHT_RED, "+", bonus, bcolors.GREY, "-->", bcolors.ORANGE, optimum, bcolors.GREY)
+
+def print_help():
+    print("    Pass number of dice to roll-keep (e.g. 6k3), followed by a bonus/penalty if applicable.")
+    print("        ./roll 6k3 [12] [-u]")
+    print("        ./roll 6k3 [-5] [--unskilled]")
+    print("    Optional parameters:")
+    print("        -u, --unskilled, dice explosion is disabled.")
+    print("        -e, --explosion, threshold value for dice explosion (10 by default).")
+    print("    When using a container, substitute './roll' for 'docker run -it --rm l5r_dice' in the examples above.")
+    print("        docker run -it --rm l5r_dice 6k3 [12] [-u]")
 
 if __name__ == "__main__":
    main(sys.argv[1:])

@@ -10,13 +10,19 @@ chmod u+x roll
 ```
 
 Pass number of dice to roll-keep (e.g. 6k3), followed by a bonus/penalty if applicable.
+```shell
+./roll 6k3 [12] [-u]
+./roll 6k3 [-5] [--unskilled]
+```
+
+Possible parameters:
 ```
     -u, --unskilled, dice explosion is disabled.
     -e, --explosion, threshold value for dice explosion (10 by default).
 ```
 
-Examples:
+If you prefer the docker image:
 ```shell
-./roll 6k3 [12] [-u]
-./roll 6k3 [-5] [--unskilled]
+docker build -t l5r_dice .
+docker run -it --rm l5r_dice
 ```
