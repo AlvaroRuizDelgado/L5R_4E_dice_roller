@@ -1,0 +1,19 @@
+language: python
+
+jobs:
+  include:
+    # Default stage is 'test'
+    - name: unit tests
+      script:
+        - python3 -m venv venv
+        - . venv/bin/activate
+        - pip install -r requirements.txt
+        - coverage run test_roll.py
+        - coverage report -m
+    - stage: container
+      name: build and upload container
+      script:
+        - container_tag=$DOCKER_USER"/l5r_dice"
+        - docker build -t $container_tag .
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - docker push $container_tag

@@ -1,5 +1,7 @@
 # L5R 4E dice roller
 
+[![Build Status](https://travis-ci.org/AlvaroRuizDelgado/L5R_4E_dice_roller.svg?branch=master)](https://travis-ci.org/AlvaroRuizDelgado/L5R_4E_dice_roller)
+
 Script to roll dice for the 4th edition of the Legend of the 5 Rings roleplaying game (python 3).
 
 ## How to use
