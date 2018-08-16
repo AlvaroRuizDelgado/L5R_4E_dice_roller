@@ -1,0 +1,20 @@
+language: python
+python:   # specifying version makes it run inside a venv
+  - "3.6"
+install:
+  - pip install -r requirements.txt
+
+jobs:
+  include:
+    # Default stage is 'test'
+    - name: unit tests
+      script:
+        - coverage run test_roll.py
+        - coverage report -m
+    - stage: container
+      name: build and upload container
+      script:
+        - container_tag=$DOCKER_USER"/l5r_dice"
+        - docker build -t $container_tag .
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - docker push $container_tag
