@@ -1,6 +1,6 @@
 language: python
 python:   # specifying version makes it run inside a venv
-  - "3.7"
+  - "3.6"
 install:
   - pip install --user -r requirements.txt
 
