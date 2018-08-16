@@ -1,13 +1,13 @@
 #!/usr/local/bin/python3
-# Last edited: 18/08/14
+# Last edited: 18/08/15
 
 import sys
 from random import randint
 
-def main(argv):
-    if (len(argv) == 0 or "--help" in argv):
+def roll(argv):
+    if (len(argv) == 0 or "--help" in argv or "-h" in argv):
         print_help()
-        sys.exit()
+        sys.exit(0)
 
     # Die characteristics
     die_range = 10
@@ -30,7 +30,6 @@ def main(argv):
             explosion_threshold = argv.pop(0)
         else:
             bonus = int(argv.pop(0))
-    print("Roll:",roll, "Keep:",keep, "Bonus:",bonus, "Exp. thresh.:", explosion_threshold, "Unskilled:",unskilled_flag)
 
     # 10 dice mechanic
     max_dice = 10
@@ -44,13 +43,14 @@ def main(argv):
                 break
         bonus += 2 * difference
         roll = max_dice
-        #print(roll, keep, bonus)
     if keep > max_dice:
         bonus += 2 * (keep - max_dice)
         keep = max_dice
-        #print(roll, keep, bonus)
     if keep > roll:
         keep = roll
+    
+    # Show the actual values
+    print("Roll:",roll, "Keep:",keep, "Bonus:",bonus, "Explosion value:", explosion_threshold, "Unskilled:",unskilled_flag)
 
     # Roll and save to a list.
     results = []
@@ -61,7 +61,6 @@ def main(argv):
             while die_roll >= explosion_threshold:
                 die_roll = randint(1,die_range)
                 results[i] += die_roll
-        #print(results[i])
 
     # Order the array and get the optimum result. Consider that there could be less dies rolled than kept.
     results.sort() # reverse=True)
@@ -75,16 +74,17 @@ def main(argv):
         LIGHT_RED = '\033[35m'
 
     print(bcolors.GREY, results[0:roll-keep], bcolors.PURPLE, results[roll-keep:], bcolors.LIGHT_RED, "+", bonus, bcolors.GREY, "-->", bcolors.ORANGE, optimum, bcolors.GREY)
+    return({'roll': roll, 'keep': keep, 'bonus': bonus, 'optimum_value': optimum})
 
 def print_help():
     print("    Pass number of dice to roll-keep (e.g. 6k3), followed by a bonus/penalty if applicable.")
-    print("        ./roll 6k3 [12] [-u]")
-    print("        ./roll 6k3 [-5] [--unskilled]")
+    print("        ./roll 6k3 [12] [-u] [-e value]")
+    print("        ./roll 6k3 [-5] [--unskilled] [--explosion value]")
     print("    Optional parameters:")
     print("        -u, --unskilled, dice explosion is disabled.")
     print("        -e, --explosion, threshold value for dice explosion (10 by default).")
     print("    When using a container, substitute './roll' for 'docker run -it --rm l5r_dice' in the examples above.")
-    print("        docker run -it --rm l5r_dice 6k3 [12] [-u]")
+    print("        docker run -it --rm l5r_dice 6k3 [12] [-u] [-e value]")
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+   roll(sys.argv[1:])
