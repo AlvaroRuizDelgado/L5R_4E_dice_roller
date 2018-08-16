@@ -27,7 +27,7 @@ def roll(argv):
             unskilled_flag = True
         elif (argv[0] == "--explosion" or argv[0] == "-e"):
             argv.pop(0)
-            explosion_threshold = argv.pop(0)
+            explosion_threshold = int(argv.pop(0))
         else:
             bonus = int(argv.pop(0))
 
