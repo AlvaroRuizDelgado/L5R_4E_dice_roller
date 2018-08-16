@@ -1,13 +1,14 @@
 language: python
+python:   # specifying version makes it run inside a venv
+  - "3.7"
+install:
+  - pip install --user -r requirements.txt
 
 jobs:
   include:
     # Default stage is 'test'
     - name: unit tests
       script:
-        - python3 -m venv venv
-        - . venv/bin/activate
-        - pip install -r requirements.txt
         - coverage run test_roll.py
         - coverage report -m
     - stage: container
