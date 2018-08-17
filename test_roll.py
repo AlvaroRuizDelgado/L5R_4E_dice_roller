@@ -25,51 +25,51 @@ class TestRoll(unittest.TestCase):
     def test_help(self):
         with self.assertRaises(SystemExit) as cm:
             roll([])
-        self.assertEqual(cm.exception.code, 0)
+        self.assertEqual(0, cm.exception.code)
         with self.assertRaises(SystemExit) as cm:
             roll(['-h'])
-        self.assertEqual(cm.exception.code, 0)
+        self.assertEqual(0, cm.exception.code)
         with self.assertRaises(SystemExit) as cm:
             roll(['--help'])
-        self.assertEqual(cm.exception.code, 0)
+        self.assertEqual(0, cm.exception.code)
 
     @mock.patch('roll.randint')
     def test_working_mock(self, mock_randint):
         mock_randint.return_value = 6
-        result = roll(['5k2'])
+        actual = roll(['5k2'])
         self.assertTrue(mock_randint.called)
-        self.assertTrue(result['optimum_value'], 12)
+        self.assertTrue(12, actual['optimum_value'])
 
     @mock.patch('roll.randint')
     def test_examples(self, mock_randint):
         for expectation in self.examples:
             mock_randint.return_value = expectation['die_roll']
-            result = roll([expectation['input'], expectation['in_bonus']])
-            test_result(self, result, expectation)
+            actual = roll([expectation['input'], expectation['in_bonus']])
+            test_result(self, expectation, actual)
 
     @mock.patch('roll.randint')
     def test_unskilled(self, mock_randint):
         mock_randint.return_value = 10
-        result = roll(['5k2', '-u'])
-        self.assertTrue(result['optimum_value'], 20)
+        actual = roll(['5k2', '-u'])
+        self.assertTrue(20, actual['optimum_value'])
         mock_randint.return_value = 10
-        result = roll(['5k2', '--unskilled'])
-        self.assertTrue(result['optimum_value'], 20)
+        actual = roll(['5k2', '--unskilled'])
+        self.assertTrue(20, actual['optimum_value'])
 
     @mock.patch('roll.randint')
     def test_exploding(self, mock_randint):
         mock_randint.return_value = 9
-        result = roll(['5k2', '-u', '-e', 9])
-        self.assertTrue(result['optimum_value'], 18)
+        actual = roll(['5k2', '-u', '-e', 9])
+        self.assertTrue(18, actual['optimum_value'])
         mock_randint.return_value = 9
-        result = roll(['5k2', '-u', '--explosion', 9])
-        self.assertTrue(result['optimum_value'], 18)
+        actual = roll(['5k2', '-u', '--explosion', 9])
+        self.assertTrue(18, actual['optimum_value'])
 
-def test_result(self, result, expectation):
-    self.assertEqual( result['roll'],           expectation['roll'] )
-    self.assertEqual( result['keep'],           expectation['keep'] )
-    self.assertEqual( result['bonus'],          expectation['end_bonus'] )
-    self.assertEqual( result['optimum_value'],  expectation['optimum_value'] )
+def test_result(self, expectation, actual):
+    self.assertEqual( expectation['roll'],          actual['roll'] )
+    self.assertEqual( expectation['keep'],          actual['keep'] )
+    self.assertEqual( expectation['end_bonus'],     actual['bonus'] )
+    self.assertEqual( expectation['optimum_value'], actual['optimum_value'] )
 
 if __name__ == '__main__':
     unittest.main()
