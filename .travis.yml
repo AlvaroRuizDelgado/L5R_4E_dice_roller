@@ -5,7 +5,7 @@ install:
   - pip install -r requirements.txt
 
 stages:
-  - name: test
+  - test
   - name: container
     if: branch = master
 
@@ -17,8 +17,7 @@ jobs:
       script:
         - coverage run test_roll.py
         - coverage report -m
-    - if: branch = master
-      stage: container
+    - stage: container
       name: build and upload container
       script:
         - container_tag=$DOCKER_USER"/l5r_dice"
