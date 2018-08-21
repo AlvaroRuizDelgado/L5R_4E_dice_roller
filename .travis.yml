@@ -4,14 +4,21 @@ python:   # specifying version makes it run inside a venv
 install:
   - pip install -r requirements.txt
 
+stages:
+  - name: test
+  - name: container
+    if: branch = master
+
 jobs:
   include:
     # Default stage is 'test'
-    - name: unit tests
+    - stage: test
+      name: unit tests
       script:
         - coverage run test_roll.py
         - coverage report -m
-    - stage: container
+    - if: branch = master
+      stage: container
       name: build and upload container
       script:
         - container_tag=$DOCKER_USER"/l5r_dice"
