@@ -13,6 +13,7 @@ jobs:
         - coverage report -m
     - stage: container
       name: build and upload container
+      if: branch = master
       script:
         - container_tag=$DOCKER_USER"/l5r_dice"
         - docker build -t $container_tag .
