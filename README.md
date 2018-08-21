@@ -45,5 +45,7 @@ coverage html
 open htmlcov/index.html
 ```
 
+Then, instead of './roll.py 5k2' --> 'docker run --rm -it l5r_dice 5k2'.
+
 You can also pull the container from dockerhub:
 https://hub.docker.com/r/alpacarider/l5r_dice
